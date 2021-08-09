@@ -1,0 +1,21 @@
+#date {
+    text-align: center;
+    font-size: 150%;
+}
+
+.dateTime {
+    width: 50%;
+    float: left;
+    text-align: center;
+}
+
+
+/*fix date and time side by side*/
+
+#da p {}
+
+#ti {
+    float: right;
+}
+
+#ti p {}
