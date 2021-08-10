@@ -25,16 +25,45 @@ const HomePage = () => {
     const [todaySolar, setTodaySolar] = useState(0)
     const [todayZerpfy, setTodayZerpfy] = useState(0)
 
-    const [hyks, setHyks] = useState(0)
-    const [kys, setKys] = useState(0)
-    const [oys, setOys] = useState(0)
-    const [tays, setTays] = useState(0)
-    const [tyks, setTyks] = useState(0)
+    let healthcaredistricts = [
+        { name: 'HYKS', orders: 0, injections: 0 },
+        { name: 'KYS', orders: 0, injections: 0 },
+        { name: 'OYS', orders: 0, injections: 0 },
+        { name: 'TAYS', orders: 0, injections: 0 },
+        { name: 'TYKS', orders: 0, injections: 0 }
+    ]
+
+    const vacsInHcd = () => {
+        smallAntiqua.map(s => {
+            healthcaredistricts.map(h => {
+                if (h.name === s.healthCareDistrict) {
+                    h.orders++
+                    h.injections += s.injections
+                }
+            })
+        })
+        smallSolar.map(s => {
+            healthcaredistricts.map(h => {
+                if (h.name === s.healthCareDistrict) {
+                    h.orders++
+                    h.injections += s.injections
+                }
+            })
+        })
+        smallZerpfy.map(s => {
+            healthcaredistricts.map(h => {
+                if (h.name === s.healthCareDistrict) {
+                    h.orders++
+                    h.injections += s.injections
+                }
+            })
+        })
+    }
+    //useEffect(() => vacsInHcd(), [vacsInHcd])
 
     const today = () => {
         let amount = 0
         smallAntiqua.map(s => {
-            console.log(s.arrived)
             if (moment(s.arrived).format('YYYY-MM-DD') === moment(dateTime).format('YYYY-MM-DD')) {
                 amount++
             }
@@ -60,7 +89,6 @@ const HomePage = () => {
 
         setArrivedToday(todayAntiqua + todaySolar + todayZerpfy)
     }
-
     useEffect(() => today(), [today])
 
     return (
@@ -69,9 +97,29 @@ const HomePage = () => {
             <Date date={dateTime} />
 
             <Arrived arrived={arrivedToday} a={todayAntiqua} s={todaySolar} z={todayZerpfy} />
-
             {/*<SomeList data={Antiqua.orders.slice(0, 10)} title={'Antiqua'}/>*/}
-            <HealthcareDistrict />
+            <div>
+                <h3>Vaccinations per healthcare district</h3>
+                {vacsInHcd()}
+                <table>
+                    <tbody>
+                        <tr>
+                            <th></th>
+                            <th>Orders</th>
+                            <th>Injections</th>
+                        </tr>
+                        {healthcaredistricts.map(h =>
+                            <HealthcareDistrict
+                                key={h.name}
+                                name={h.name}
+                                orders={h.orders}
+                                injections={h.injections}
+                            />)}
+                    </tbody>
+                </table>
+
+
+            </div>
         </div>
 
     );
