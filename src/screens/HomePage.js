@@ -11,19 +11,38 @@ import vaccinations from '../resources/vaccinations.json'
 // components
 //import SomeList from '../components/SomeList';
 import Date from '../components/Date'
-import Arrived from '../components/Arrived';
-import HealthcareDistrict from '../components/HealthcareDistrict';
+import Arrived from '../components/Arrived'
+import HealthcareDistrict from '../components/HealthcareDistrict'
+import Total from '../components/Total'
+import UsedLeft from '../components/UsedLeft'
 
 const HomePage = () => {
     const [dateTime, setDateTime] = useState('2021-04-11T11:10:06')
     const [arrivedToday, setArrivedToday] = useState(0)
-    const smallAntiqua = Antiqua.orders//.slice(0, 10)
-    const smallSolar = SolarBuddhica.orders//.slice(0, 10)
-    const smallZerpfy = Zerpfy.orders//.slice(0, 10)
+
+    let smallAntiqua = Antiqua.orders.slice(0, 100)
+    let smallSolar = SolarBuddhica.orders.slice(0, 100)
+    let smallZerpfy = Zerpfy.orders.slice(0, 100)
+    let vacs = vaccinations.vaccinations.slice(0, 100)
+
+    const [totalOrders, setTotalOrders] = useState(0)
+    const [totalInjections, setTotalInjections] = useState(0)
+    const [usedInjections, setUsedInjections] = useState(0)
 
     const [todayAntiqua, setTodayAntiqua] = useState(0)
     const [todaySolar, setTodaySolar] = useState(0)
     const [todayZerpfy, setTodayZerpfy] = useState(0)
+
+    const [antiquaInjections, setAntiquaInjections] = useState(0)
+    const [solarInjections, setSolarInjections] = useState(0)
+    const [zerpfyInjections, setZerpfyInjections] = useState(0)
+//Vaihda tähän!
+    /*let producers = [
+        {name: 'Antiqua', orders: Antiqua.orders, totalOrderAmount: Antiqua.orders.length, totalInjections: 0, arrivedToday: 0},
+        {name: 'SolaBuddhica', orders: SolarBuddhica.orders, totalOrderAmount: SolarBuddhica.orders.length, totalInjections: 0, arrivedToday: 0},
+        {name: 'Zerpfy', orders: Zerpfy.orders, totalOrderAmount: Zerpfy.orders.length, totalInjections: 0, arrivedToday: 0},
+    ]
+    console.log(producers[0].orders)*/
 
     let healthcaredistricts = [
         { name: 'HYKS', orders: 0, injections: 0 },
@@ -33,9 +52,58 @@ const HomePage = () => {
         { name: 'TYKS', orders: 0, injections: 0 }
     ]
 
-    //Count how many orders/injections are used and how many is left
+    //Count how many orders and injections are total
+    const calculate = () => {
+        let amount = 0
+        smallAntiqua.map(s => {
+            amount += s.injections
+        })
+        setAntiquaInjections(amount)
+        amount = 0
+        smallSolar.map(s => {
+            amount += s.injections
+        })
+        setSolarInjections(amount)
+        amount = 0
+        smallZerpfy.map(s => {
+            amount += s.injections
+        })
+        setZerpfyInjections(amount)
+        setTotalOrders(smallAntiqua.length + smallSolar.length + smallZerpfy.length)
+        setTotalInjections(antiquaInjections + solarInjections + zerpfyInjections)
+    }
+    useEffect(() => calculate(), [calculate])
 
-    
+    //Count how many injections are used and how many is left
+    const usedVaccinations = () => {
+        let used = 0
+        vacs.map(v => {
+            smallAntiqua.map(a => {
+                if (v.sourceBottle === a.id) {
+                    a.injections--
+                    used++
+                }
+            })
+            smallSolar.map(s => {
+                if (v.sourceBottle === s.id) {
+                    s.injections--
+                    used++
+                }
+            })
+            smallZerpfy.map(z => {
+                if (v.sourceBottle === z.id) {
+                    z.injections--
+                    used++
+                }
+            })
+        })
+        setUsedInjections(used)
+        /*console.log(totalInjections)
+        setTotalInjections(totalInjections - usedInjections)
+        console.log(totalInjections, ' moi ', usedInjections)*/
+    }
+    useEffect(() => usedVaccinations(), [])
+
     //Count how many is expired and is going to expire in next days
 
     // Counts how many orders and injections are per healthcare district
@@ -115,8 +183,21 @@ const HomePage = () => {
                 <Arrived arrived={arrivedToday} a={todayAntiqua} s={todaySolar} z={todayZerpfy} />
             </div>
             <div>
+                <h3>Total amount of orders and injections</h3>
+                <Total
+                    totalOrders={totalOrders}
+                    totalInjections={totalInjections}
+                    ant={smallAntiqua}
+                    sol={smallSolar}
+                    zer={smallZerpfy}
+                    antInj={antiquaInjections}
+                    solInj={solarInjections}
+                    zerInj={zerpfyInjections}
+                />
+            </div>
+            <div>
                 <h3>Used and left</h3>
-
+                <UsedLeft totalInjections={totalInjections} usedInjections={usedInjections} />
             </div>
             {/*<SomeList data={Antiqua.orders.slice(0, 10)} title={'Antiqua'}/>*/}
             <div className="hcd">

@@ -4,8 +4,8 @@ const HealthcareDistrict = ({ name, orders, injections }) => {
     return (
         <tr>
             <th>{name}</th>
-            <th>{orders}</th>
-            <th>{injections}</th>
+            <td>{orders}</td>
+            <td>{injections}</td>
         </tr>
     )
 }
