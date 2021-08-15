@@ -18,3 +18,7 @@ h1 {
     padding-top: 0.2em;
     font-size: 300%;
 }
+
+.parts {
+    border-top: 1px solid black;
+}

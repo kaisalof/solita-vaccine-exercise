@@ -3,8 +3,6 @@ import moment from 'moment'
 import '../styles/date.css';
 
 const Date = ({ date }) => {
-    //const m = moment(date)
-    console.log()
 
     return (
         <div id="date">
