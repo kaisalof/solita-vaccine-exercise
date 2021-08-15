@@ -4,9 +4,9 @@ const Total = ({ usedInjections, expiredInjections, totalInjections }) => {
 
     return (
         <div>
-            <p>Used injections: {usedInjections}</p>
-            <p>Expired injections: {expiredInjections}</p>
-            <p>Injections left: {totalInjections}</p>
+            <p>Used vaccinations: {usedInjections}</p>
+            <p>Expired vaccinations: {expiredInjections}</p>
+            <p>Vaccinations left: {totalInjections}</p>
         </div>
     )
 }

@@ -6,12 +6,7 @@ const Date = ({ date }) => {
 
     return (
         <div id="date">
-            <div className="dateTime" id="da">
-                <p ><b>Date:</b> {moment(date).format('MMM Do YY')}</p>
-            </div>
-            <div className="dateTime" id="ti">
-                <p ><b>Time:</b> {moment(date).format('hh:mm')}</p>
-            </div>
+            <p>{moment(date).format('MMMM Do YYYY')}</p>
         </div>
     );
 }

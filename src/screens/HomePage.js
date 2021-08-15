@@ -11,7 +11,7 @@ import vaccinations from '../resources/vaccinations.json'
 // components
 import All from '../components/All';
 import Date from '../components/Date'
-import HealthcareDistrict from '../components/HealthcareDistrict'
+import HealthcareDistricts from '../components/HealthcareDistricts'
 import TotalPerProducer from '../components/TotalPerProducer'
 import Total from '../components/Total';
 import ArrivedOrders from '../components/ArrivedOrders';
@@ -56,6 +56,7 @@ const HomePage = () => {
     })
 
     const [hyksData, setHyksData] = useState({
+        name: '',
         injectionAmount: 0,
         allOrders: [],
         expiredI: 0,
@@ -63,6 +64,7 @@ const HomePage = () => {
         leftInjections: 0
     })
     const [kysData, setKysData] = useState({
+        name: '',
         injectionAmount: 0,
         allOrders: [],
         expiredI: 0,
@@ -70,6 +72,7 @@ const HomePage = () => {
         leftInjections: 0
     })
     const [oysData, setOysData] = useState({
+        name: '',
         injectionAmount: 0,
         allOrders: [],
         expiredI: 0,
@@ -77,6 +80,7 @@ const HomePage = () => {
         leftInjections: 0
     })
     const [taysData, setTaysData] = useState({
+        name: '',
         injectionAmount: 0,
         allOrders: [],
         expiredI: 0,
@@ -84,6 +88,7 @@ const HomePage = () => {
         leftInjections: 0
     })
     const [tyksData, setTyksData] = useState({
+        name: '',
         injectionAmount: 0,
         allOrders: [],
         expiredI: 0,
@@ -131,8 +136,10 @@ const HomePage = () => {
         })
 
         const leftInjections = injectionAmount - usedI - expiredI
+        const name = district
 
         return {
+            name,
             injectionAmount,
             allOrders,
             expiredI,
@@ -224,58 +231,73 @@ const HomePage = () => {
     return (
         <div id="home">
             <h1>Vaccinations</h1>
+            <div className="topInfo">
+                <div id="today" className="parts">
+                    <div>
+                        <Date date={dateTime} />
+                    </div>
 
-            <div className="parts">
-                <Date date={dateTime} />
+                    <div id="todayInfo">
+                        <div id="arrived">
+                            <p id="todays">Today has arrived {arrivedToday} vaccinations</p>
+
+                            <ArrivedOrders
+                                key={'antiqua'}
+                                name={'Antiqua'}
+                                todayArrived={antiquaData.arrivedToday.length}
+                            />
+                            <ArrivedOrders
+                                key={'solarbuddhica'}
+                                name={'SolarBuddhica'}
+                                todayArrived={solarData.arrivedToday.length}
+                            />
+                            <ArrivedOrders
+                                key={'zerpfy'}
+                                name={'Zerpfy'}
+                                todayArrived={zerpfyData.arrivedToday.length}
+                            />
+                        </div>
+
+                        <div id="expires">
+                            <p> {expiresToday} bottles expires today</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="total" className="parts">
+                    <div id="ordersInjections">
+                        <h3>Total amount of orders and injections</h3>
+                        <All
+                            totalOrders={totalOrders}
+                            totalInjections={totalInjections}
+                        />
+                    </div>
+                    <div id="injections">
+                        <h3>Vaccination amounts</h3>
+                        <Total
+                            usedInjections={usedInjections}
+                            expiredInjections={expiredInjections}
+                            totalInjections={antiquaData.injectionsLeft + solarData.injectionsLeft + zerpfyData.injectionsLeft}
+                        />
+                    </div>
+                </div>
             </div>
 
-            <div className="parts">
-                <h3>Arrived today</h3>
-                <p>Today has arrived {arrivedToday} vaccinations</p>
-
-                <ArrivedOrders
-                    key={'antiqua'}
-                    name={'Antiqua'}
-                    todayArrived={antiquaData.arrivedToday.length}
-                />
-                <ArrivedOrders
-                    key={'solarbuddhica'}
-                    name={'SolarBuddhica'}
-                    todayArrived={solarData.arrivedToday.length}
-                />
-                <ArrivedOrders
-                    key={'zerpfy'}
-                    name={'Zerpfy'}
-                    todayArrived={zerpfyData.arrivedToday.length}
-                />
-
-            </div>
-
-            <div className="parts">
-                <p>Today expires {expiresToday} bottles</p>
-            </div>
-
-            <div className="parts">
-                <All
-                    totalOrders={totalOrders}
-                    totalInjections={totalInjections}
-                />
-            </div>
-
-            <div className="parts">
-                <h3>Orders and injections per producer</h3>
+            <div id="producers">
+                <h3>Orders and vaccines per producer</h3>
                 <table>
                     <tbody>
                         <tr>
                             <th>Producer</th>
                             <th>Total orders</th>
-                            <th>Total injections</th>
-                            <th>Used injections</th>
-                            <th>Expired injections</th>
-                            <th>Injections left</th>
+                            <th>Total vaccines</th>
+                            <th>Used vaccines</th>
+                            <th>Expired vaccines</th>
+                            <th>Vaccines left</th>
                         </tr>
 
                         <TotalPerProducer
+                            className="rowsInProducers"
                             key={'antiqua'}
                             name={'Antiqua'}
                             totalO={antiquaData.totalAmountOfOrders}
@@ -285,6 +307,7 @@ const HomePage = () => {
                             inj={antiquaData.injectionsLeft}
                         />
                         <TotalPerProducer
+                            className="rowsInProducers"
                             key={'solarbuddhica'}
                             name={'SolarBuddhica'}
                             totalO={solarData.totalAmountOfOrders}
@@ -294,6 +317,7 @@ const HomePage = () => {
                             inj={solarData.injectionsLeft}
                         />
                         <TotalPerProducer
+                            className="rowsInProducers"
                             key={'zerpfy'}
                             name={'Zerpfy'}
                             totalO={zerpfyData.totalAmountOfOrders}
@@ -304,46 +328,23 @@ const HomePage = () => {
                         />
                     </tbody>
                 </table>
-                <h3>Injection amounts</h3>
-                <Total
-                    usedInjections={usedInjections}
-                    expiredInjections={expiredInjections}
-                    totalInjections={antiquaData.injectionsLeft + solarData.injectionsLeft + zerpfyData.injectionsLeft}
-                />
+
             </div>
 
-            <div className="parts">
-                <HealthcareDistrict
-                    hyksO={hyksData.allOrders.length}
-                    hyksI={hyksData.injectionAmount}
-                    hyksU={hyksData.usedI}
-                    hyksE={hyksData.expiredI}
-                    hyksL={hyksData.leftInjections}
-
-                    kysO={kysData.allOrders.length}
-                    kysI={kysData.injectionAmount}
-                    kysU={kysData.usedI}
-                    kysE={kysData.expiredI}
-                    kysL={kysData.leftInjections}
-
-                    oysO={oysData.allOrders.length}
-                    oysI={oysData.injectionAmount}
-                    oysU={oysData.usedI}
-                    oysE={oysData.expiredI}
-                    oysL={oysData.leftInjections}
-
-                    taysO={taysData.allOrders.length}
-                    taysI={taysData.injectionAmount}
-                    taysU={taysData.usedI}
-                    taysE={taysData.expiredI}
-                    taysL={taysData.leftInjections}
-
-                    tyksO={tyksData.allOrders.length}
-                    tyksI={tyksData.injectionAmount}
-                    tyksU={tyksData.usedI}
-                    tyksE={tyksData.expiredI}
-                    tyksL={tyksData.leftInjections}
-                />
+            <div id="districts">
+                <h3>Healthcare Districts</h3>
+                <div id="hcd">
+                    <HealthcareDistricts
+                        hyksData={hyksData}
+                        kysData={kysData}
+                        oysData={oysData}
+                        taysData={taysData}
+                        tyksData={tyksData}
+                    />
+                </div>
+            </div>
+            <div>
+                <footer>Coded by Kaisa &#129311;</footer>
             </div>
         </div>
 
