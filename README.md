@@ -33,3 +33,7 @@ And finally start the app
 npm start
 ```
 
+
+## Link
+
+Here is straight link to netlify where you can check my app https://solitavaccineexercise2021.netlify.app/
